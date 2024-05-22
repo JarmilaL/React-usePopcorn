@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { tempMovieData } from '../../../App';
 
-export default function MovieList() {
-  const [movies, setMovies] = useState(tempMovieData);
+export default function MovieList({ movies }) {
 
   return (
     <ul className="list">
