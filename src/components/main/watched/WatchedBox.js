@@ -4,7 +4,7 @@ import { WatchedSummary } from './WatchedSummary';
 
 import { useState } from 'react';
 
-export function WatchedBox() {
+export default function WatchedBox() {
   const [watched, setWatched] = useState(tempWatchedData);
   const [isOpen2, setIsOpen2] = useState(true);
 

@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import { tempMovieData } from '../../../App';
 
 export default function MovieList({ movies }) {
 
