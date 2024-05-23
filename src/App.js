@@ -3,9 +3,10 @@ import Main from './components/main/Main';
 import { useState } from 'react';
 import Search from './components/navigation/Search';
 import NumberOfResults from './components/navigation/NumberOfResults';
-import ListBox from './components/main/list/ListBox';
+import ListBox from './components/main/ListBox';
 import MovieList from './components/main/list/MovieList';
-import WatchedBox from './components/main/watched/WatchedBox';
+import WatchedSummary from './components/main/watched/WatchedSummary';
+import WatchedMoviesList from './components/main/watched/WatchedMoviesList';
 
 export const tempMovieData = [
   {
@@ -59,6 +60,7 @@ export const average = (arr) =>
 
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
+  const [watched, setWatched] = useState(tempWatchedData);
 
   return (
     <>
@@ -66,12 +68,16 @@ export default function App() {
         <Search />
         <NumberOfResults movies={movies} />
       </NavigationBar>
-      
+
       <Main>
         <ListBox>
           <MovieList movies={movies} />
         </ListBox>
-        <WatchedBox />
+
+        <ListBox>
+          <WatchedSummary watched={watched} />
+          <WatchedMoviesList watched={watched} />
+        </ListBox>
       </Main>
     </>
   );

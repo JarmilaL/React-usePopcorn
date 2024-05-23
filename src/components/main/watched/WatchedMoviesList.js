@@ -1,4 +1,4 @@
-export function WatchedMoviesList({ watched }) {
+export default function WatchedMoviesList({ watched }) {
   return (
     <ul className="list">
       {watched.map((movie) => (
