@@ -78,6 +78,21 @@ export default function App() {
           <WatchedSummary watched={watched} />
           <WatchedMoviesList watched={watched} />
         </ListBox>
+
+        {/* EXPLICITLY DEFINED PROPS
+              - instead of accepting children in the ListBox, we accept element (can be named differently)
+              - can be used in case we need to pass several elements with different names
+              - prefered way is the above
+        
+        <ListBox element={<MovieList movies={movies} />} />
+        <ListBox
+          element={
+            <>
+              <WatchedSummary watched={watched} />
+              <WatchedMoviesList watched={watched} />
+            </>
+          }
+        /> */}
       </Main>
     </>
   );
