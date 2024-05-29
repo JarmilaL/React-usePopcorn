@@ -1,6 +1,6 @@
 import NavigationBar from './components/navigation/NavigationBar';
 import Main from './components/main/Main';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Search from './components/navigation/Search';
 import NumberOfResults from './components/navigation/NumberOfResults';
 import ListBox from './components/main/ListBox';
@@ -64,12 +64,10 @@ export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
 
-  // This is use to register side effect
-  useEffect(function () {
-    fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=interstellar`)
-      .then((res) => res.json())
-      .then((data) => setMovies(data.Search));
-  }, []);
+  // !!! This approach causes an infinite loop of data fetching - DO NOT DO THAT !!!
+  // fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=interstellar`)
+  //   .then((res) => res.json())
+  //   .then((data) => setMovies(data.Search));
 
   return (
     <>
