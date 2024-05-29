@@ -63,6 +63,7 @@ const KEY = '9d7f4d79';
 export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // This is use to register side effect to fetch the data when component mounts
   useEffect(function () {
@@ -72,11 +73,13 @@ export default function App() {
 
     //Better way with async function
     async function fetchMovies() {
+      setIsLoading(true);
       const res = await fetch(
         `http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=interstellar`
       );
       const data = await res.json();
       setMovies(data.Search);
+      setIsLoading(false);
     }
 
     fetchMovies();
@@ -91,7 +94,7 @@ export default function App() {
 
       <Main>
         <ListBox>
-          <MovieList movies={movies} />
+          {isLoading ? <Loader /> : <MovieList movies={movies} />}
         </ListBox>
 
         <ListBox>
@@ -116,4 +119,8 @@ export default function App() {
       </Main>
     </>
   );
+}
+
+function Loader() {
+  return <p className="loader">Loading...</p>;
 }
