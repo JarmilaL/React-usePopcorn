@@ -65,44 +65,58 @@ export default function App() {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [query, setQuery] = useState('');
+  const [selectedId, setSelectedId] = useState(null);
+
+  const tempQuery = 'harry_potter';
 
   // useEffect is used to register side effect to fetch the data when component mounts
-  useEffect(function () {
-    // fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=interstellar`)
-    //   .then((res) => res.json())
-    //   .then((data) => setMovies(data.Search));
+  useEffect(
+    function () {
+      // fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${tempQuery}`)
+      //   .then((res) => res.json())
+      //   .then((data) => setMovies(data.Search));
 
-    //Better way with async function
-    async function fetchMovies() {
-      try {
-        setIsLoading(true);
-        const res = await fetch(
-          `http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=kkaviuekk`
-        );
+      //Better way with async function
+      async function fetchMovies() {
+        try {
+          setIsLoading(true);
+          setError('');
 
-        if (!res.ok) throw new Error('Something went wrong.');
+          const res = await fetch(
+            `http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`
+          );
 
-        const data = await res.json();
+          if (!res.ok) throw new Error('Something went wrong.');
 
-        if (data.Response === 'False') throw new Error('Movie not found.');
+          const data = await res.json();
 
-        setMovies(data.Search);
-        console.log(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
+          setMovies(data.Search);
+
+          if (data.Response === 'False') throw new Error('Movie not found.');
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setIsLoading(false);
+        }
       }
-    }
 
-    fetchMovies();
-  }, []);
+      if (query.length < 3) {
+        setMovies([]);
+        setError('');
+        return;
+      }
+
+      fetchMovies();
+    },
+    [query]
+  );
 
   return (
     <>
       <NavigationBar>
-        <Search />
-        <NumberOfResults movies={movies} />
+        <Search query={query} setQuery={setQuery} />
+        <NumberOfResults moviesCount={movies.length} />
       </NavigationBar>
 
       <Main>
