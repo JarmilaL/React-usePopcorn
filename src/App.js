@@ -77,13 +77,17 @@ export default function App() {
       //   .then((data) => setMovies(data.Search));
 
       //Better way with async function
+
+      const controller = new AbortController();
+
       async function fetchMovies() {
         try {
           setIsLoading(true);
           setError('');
 
           const res = await fetch(
-            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+            { signal: controller.signal }
           );
 
           if (!res.ok) throw new Error('Something went wrong.');
@@ -91,10 +95,13 @@ export default function App() {
           const data = await res.json();
 
           setMovies(data.Search);
+          setError('');
 
           if (data.Response === 'False') throw new Error('Movie not found.');
         } catch (error) {
-          setError(error.message);
+          if (error.name !== 'AbortError') {
+            setError(error.message);
+          }
         } finally {
           setIsLoading(false);
         }
@@ -107,6 +114,10 @@ export default function App() {
       }
 
       fetchMovies();
+
+      return function () {
+        controller.abort();
+      };
     },
     [query]
   );
