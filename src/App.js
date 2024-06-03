@@ -7,7 +7,7 @@ import ListBox from './components/main/ListBox';
 import MovieList from './components/main/list/MovieList';
 import WatchedSummary from './components/main/watched/WatchedSummary';
 import WatchedMoviesList from './components/main/watched/WatchedMoviesList';
-import { MovieDetails } from './components/main/list/MovieList';
+import { MovieDetails } from './components/main/list/MovieDetails';
 
 export const tempMovieData = [
   {
@@ -113,7 +113,6 @@ export default function App() {
 
   function handleSelectMovie(id) {
     // setSelectedId((selectedId) => (id === selectedId ? null : id));
-    console.log(id);
     setSelectedId(id);
   }
 
@@ -123,6 +122,10 @@ export default function App() {
 
   function handleAddWatched(movie) {
     setWatched((watched) => [...watched, movie]);
+  }
+
+  function handleDeleteWatched(id) {
+    setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
 
   return (
@@ -147,13 +150,17 @@ export default function App() {
           {selectedId ? (
             <MovieDetails
               selectedId={selectedId}
+              watched={watched}
               handleCloseMovie={handleCloseMovie}
               handleAddWatched={handleAddWatched}
             />
           ) : (
             <>
               <WatchedSummary watched={watched} />
-              <WatchedMoviesList watched={watched} />
+              <WatchedMoviesList
+                watched={watched}
+                handleDeleteWatched={handleDeleteWatched}
+              />
             </>
           )}
         </ListBox>
