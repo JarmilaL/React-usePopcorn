@@ -31,9 +31,14 @@ function Movie({ movie, handleSelectMovie }) {
   );
 }
 
-export function MovieDetails({ selectedId, handleCloseMovie }) {
+export function MovieDetails({
+  selectedId,
+  handleCloseMovie,
+  handleAddWatched,
+}) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [userRating, setUserRating] = useState(0);
 
   const {
     Title: title,
@@ -67,6 +72,21 @@ export function MovieDetails({ selectedId, handleCloseMovie }) {
     [selectedId]
   );
 
+  function handleAdd() {
+    const newWatchedMovie = {
+      imdbID: selectedId,
+      title,
+      year,
+      poster,
+      imdbRating: Number(imdbRating),
+      runtime: Number(runtime.split(' ').at(0)),
+      userRating,
+    };
+
+    handleAddWatched(newWatchedMovie);
+    handleCloseMovie();
+  }
+
   return (
     <>
       <div className="details">
@@ -94,7 +114,16 @@ export function MovieDetails({ selectedId, handleCloseMovie }) {
 
             <section>
               <div className="rating">
-                <StarRating maxRating={10} size={24} />
+                <StarRating
+                  maxRating={10}
+                  size={24}
+                  onSetRating={setUserRating}
+                />
+                {userRating > 0 && (
+                  <button className="btn-add" onClick={handleAdd}>
+                    + Add to list
+                  </button>
+                )}
               </div>
               <p>
                 <em>{plot}</em>

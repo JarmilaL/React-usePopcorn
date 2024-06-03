@@ -121,6 +121,10 @@ export default function App() {
     setSelectedId(null);
   }
 
+  function handleAddWatched(movie) {
+    setWatched((watched) => [...watched, movie]);
+  }
+
   return (
     <>
       <NavigationBar>
@@ -144,6 +148,7 @@ export default function App() {
             <MovieDetails
               selectedId={selectedId}
               handleCloseMovie={handleCloseMovie}
+              handleAddWatched={handleAddWatched}
             />
           ) : (
             <>
