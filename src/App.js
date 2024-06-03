@@ -67,7 +67,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [query, setQuery] = useState('');
-  const [selectedId, setSelectedId] = useState('tt1375666');
+  const [selectedId, setSelectedId] = useState(null);
 
   // useEffect is used to register side effect to fetch the data when component mounts
   useEffect(
