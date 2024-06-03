@@ -7,6 +7,7 @@ import ListBox from './components/main/ListBox';
 import MovieList from './components/main/list/MovieList';
 import WatchedSummary from './components/main/watched/WatchedSummary';
 import WatchedMoviesList from './components/main/watched/WatchedMoviesList';
+import { MovieDetails } from './components/main/list/MovieList';
 
 export const tempMovieData = [
   {
@@ -58,7 +59,7 @@ export const tempWatchedData = [
 export const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-const KEY = '9d7f4d79';
+export const KEY = '9d7f4d79';
 
 export default function App() {
   const [movies, setMovies] = useState([]);
@@ -66,9 +67,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [query, setQuery] = useState('');
-  const [selectedId, setSelectedId] = useState(null);
-
-  const tempQuery = 'harry_potter';
+  const [selectedId, setSelectedId] = useState('tt1375666');
 
   // useEffect is used to register side effect to fetch the data when component mounts
   useEffect(
@@ -84,7 +83,7 @@ export default function App() {
           setError('');
 
           const res = await fetch(
-            `http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`
+            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
           );
 
           if (!res.ok) throw new Error('Something went wrong.');
@@ -112,6 +111,16 @@ export default function App() {
     [query]
   );
 
+  function handleSelectMovie(id) {
+    // setSelectedId((selectedId) => (id === selectedId ? null : id));
+    console.log(id);
+    setSelectedId(id);
+  }
+
+  function handleCloseMovie() {
+    setSelectedId(null);
+  }
+
   return (
     <>
       <NavigationBar>
@@ -121,7 +130,9 @@ export default function App() {
 
       <Main>
         <ListBox>
-          {!isLoading && !error && <MovieList movies={movies} />}
+          {!isLoading && !error && (
+            <MovieList movies={movies} handleSelectMovie={handleSelectMovie} />
+          )}
           {error && <ErrorMessage message={error} />}
           {isLoading && <Loader />}
 
@@ -129,8 +140,17 @@ export default function App() {
         </ListBox>
 
         <ListBox>
-          <WatchedSummary watched={watched} />
-          <WatchedMoviesList watched={watched} />
+          {selectedId ? (
+            <MovieDetails
+              selectedId={selectedId}
+              handleCloseMovie={handleCloseMovie}
+            />
+          ) : (
+            <>
+              <WatchedSummary watched={watched} />
+              <WatchedMoviesList watched={watched} />
+            </>
+          )}
         </ListBox>
 
         {/* EXPLICITLY DEFINED PROPS
@@ -152,11 +172,11 @@ export default function App() {
   );
 }
 
-function Loader() {
+export function Loader() {
   return <p className="loader">Loading...</p>;
 }
 
-function ErrorMessage({ message }) {
+export function ErrorMessage({ message }) {
   return (
     <p className="error">
       <span>😧</span> {message}
